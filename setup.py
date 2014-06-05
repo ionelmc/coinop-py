@@ -5,10 +5,13 @@ setup(name='coinop',
       description='Crypto-currency conveniences',
       url='http://github.com/BitVault/coinop-py',
       author='Matthew King',
-      author_email='matthew@pandastrike.com',
+      author_email='matthew@bitvault.io',
       license='MIT',
       packages=['coinop'],
       install_requires=[
+          'pytest',
+          'pycrypto',
+          'pynacl'
       ],
       zip_safe=False)
 
