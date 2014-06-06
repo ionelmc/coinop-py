@@ -11,7 +11,9 @@ setup(name='coinop',
       install_requires=[
           'pytest',
           'pycrypto',
-          'pynacl'
+          'pynacl',
+          'python-bitcoinlib',
+          'pycoin'
       ],
       zip_safe=False)
 
