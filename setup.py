@@ -13,7 +13,9 @@ setup(name='coinop',
           'pycrypto',
           'pynacl',
           'python-bitcoinlib',
-          'pycoin'
+          'pycoin',
+          'PyYAML',
+          'ecdsa'
       ],
       zip_safe=False)
 

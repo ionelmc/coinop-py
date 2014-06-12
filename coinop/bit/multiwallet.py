@@ -1,5 +1,12 @@
+from binascii import hexlify, unhexlify
 from nacl.utils import random
-from pycoin.key import bip32
+
+from pycoin.key import Key, bip32
+from bitcoin.core.script import CScript, OP_CHECKMULTISIG
+from bitcoin.wallet import CBitcoinSecret
+
+from .script import Script
+
 from pycoin.serialize import h2b
 
 class MultiWallet:
@@ -15,7 +22,7 @@ class MultiWallet:
         for name in names:
             seeds[name] = create_node(name).wallet_key(as_private=True)
 
-        cls(private=seeds)
+        return cls(private=seeds)
 
 
     def __init__(self, private={}, public={}):
@@ -33,14 +40,14 @@ class MultiWallet:
 
     def private_seed(self, name):
         try:
-            return self.private_trees[name]
+            return self.private_trees[name].wallet_key(as_private=True)
         except KeyError:
             raise Exception("No private tree for '{0}'".format(name))
 
 
     def public_seed(self, name):
         try:
-            return self.public_trees[name]
+            return self.public_trees[name].wallet_key()
         except KeyError:
             raise Exception("No public tree for '{0}'".format(name))
 
@@ -96,13 +103,31 @@ class MultiNode:
         self.private = private
         self.public = public
 
+        self.private_keys = {}
+        self.public_keys = {}
+
+        for name, node in private.iteritems():
+            print repr(hexlify(node.serialize()))
+            key = Key.from_text(node.wallet_key(as_private=True))
+            self.private_keys[name] = key
+
+            pubkey = Key.from_text(node.wallet_key())
+            self.public_keys[name] = key
+        #for name, node in public.iteritems():
+            #pass
+
     def script(self, m=2):
-        names = self.public_keys.keys().sort()
-        keys = [self.public_keys[name] for name in names]
+        names = sorted(self.public_keys.keys())
+        keys = [self.public_keys[name].sec() for name in names]
+        print repr(keys)
+
         return Script(public_keys=keys, needed=m)
 
     def address(self):
-        return self.script.p2sh_address
+        def p2sh_address(script):
+            return "foooooo"
+        return p2sh_address(self.script)
+
 
     def p2sh_script(self):
         return Script(address=self.address)
