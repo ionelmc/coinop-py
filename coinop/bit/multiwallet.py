@@ -6,6 +6,7 @@ from bitcoin.core.script import CScript, OP_CHECKMULTISIG
 from bitcoin.wallet import CBitcoinSecret
 
 from .script import Script
+from .keys import PrivateKey, PublicKey
 
 from pycoin.serialize import h2b
 
@@ -107,19 +108,23 @@ class MultiNode:
         self.public_keys = {}
 
         for name, node in private.iteritems():
-            print repr(hexlify(node.serialize()))
-            key = Key.from_text(node.wallet_key(as_private=True))
-            self.private_keys[name] = key
+            #key = Key.from_text(node.wallet_key(as_private=True))
+            priv = PrivateKey.from_secret(node.secret_exponent_bytes)
+            self.private_keys[name] = priv
 
-            pubkey = Key.from_text(node.wallet_key())
-            self.public_keys[name] = key
-        #for name, node in public.iteritems():
-            #pass
+            #pubkey = Key.from_text(node.wallet_key())
+            pub = priv.public_key()
+            self.public_keys[name] = pub
+
+        for name, node in public.iteritems():
+            pub = PublicKey.from_pair(node.public_pair)
+            self.public_keys[name] = pub
+            pass
 
     def script(self, m=2):
         names = sorted(self.public_keys.keys())
-        keys = [self.public_keys[name].sec() for name in names]
-        print repr(keys)
+        keys = [self.public_keys[name].compressed() for name in names]
+        #print repr(keys)
 
         return Script(public_keys=keys, needed=m)
 

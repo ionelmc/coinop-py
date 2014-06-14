@@ -44,8 +44,9 @@ def test_compatibility():
     for path, values in data['paths'].iteritems():
         node = wallet.path(path)
         multisig_script = node.script()
-        print multisig_script.to_string()
-        print multisig_script.to_hex()
+        print "rb", values["multisig_script"]
+        print "py", multisig_script.to_string()
+        #print multisig_script.to_hex()
 
     
 

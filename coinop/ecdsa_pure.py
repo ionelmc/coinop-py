@@ -127,7 +127,7 @@ class KEY:
 
     def sign(self, hash):
         sig = self.prikey.sign_digest(hash, sigencode=ecdsa.util.sigencode_der)
-        return sig.to_der()
+        return sig
 
     def verify(self, hash, sig):
         return self.pubkey.verify_digest(sig[:-1], hash, sigdecode=ecdsa.util.sigdecode_der)
