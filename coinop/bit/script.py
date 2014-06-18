@@ -1,6 +1,23 @@
 from binascii import hexlify, unhexlify
 from bitcoin.core.script import CScript, OPCODES_BY_NAME, OP_CHECKMULTISIG, CScriptTruncatedPushDataError, CScriptInvalidError
-from bitcoin.core import b2x
+
+from bitcoin.wallet import CBitcoinAddress
+from bitcoin.core import b2x, Hash160
+import bitcoin
+from bitcoin.base58 import encode, decode
+
+def encode_address(data, network):
+    if network == "mainnet":
+        version = 5
+    elif network == "testnet":
+        version = 196
+    else:
+        raise ValueError("Unknown network")
+
+    data = chr(version) + data
+    check = bitcoin.core.Hash(data)[0:4]
+    return encode(data + check)
+            
 
 # adapted from python-bitcoinlib's tests
 def from_string(string):
@@ -16,10 +33,10 @@ def from_string(string):
         opcodes_by_name[name] = code
         opcodes_by_name[name[3:]] = code
 
-    for word in s.split():
+    for word in string.split():
         if word.isdigit() or (word[0] == '-' and word[1:].isdigit()):
             r.append(CScript([long(word)]))
-        elif word.startswith('0x') and ishex(word[2:]):
+        elif ishex(word[2:]):
             # Raw hex data, inserted NOT pushed onto stack:
             r.append(unhexlify(word[2:].encode('utf8')))
         elif len(word) >= 2 and word[0] == "'" and word[-1] == "'":
@@ -27,7 +44,7 @@ def from_string(string):
         elif word in opcodes_by_name:
             r.append(CScript([opcodes_by_name[word]]))
         else:
-            raise ValueError("Error parsing script: %r" % s)
+            raise ValueError("Error parsing script: %r" % string)
 
     return CScript(b''.join(r))
 
@@ -75,8 +92,10 @@ def cscript_to_string(cscript):
 class Script:
 
     def __init__(self, **options):
-        if 'string' in options:
-            self.set_cscript(Script.from_string(options['string']))
+        if 'cscript' in options:
+            self.set_cscript(options['cscript'])
+        elif 'string' in options:
+            self.set_cscript(from_string(options['string']))
         elif 'binary' in options:
             self.set_cscript(CScript(options['binary']))
         elif 'hex' in options:
@@ -102,14 +121,15 @@ class Script:
         return hexlify(self.cscript)
 
     def to_binary(self):
-        pass
+        return
 
     def hash160(self):
-        pass
+        return Hash160(self.cscript)
 
     def p2sh_script(self):
-        pass
+        cscript = self.script.to_p2sh_scriptPubKey()
+        return Script(cscript=cscript)
 
-    def p2sh_address(self):
-        pass
+    def p2sh_address(self, network="testnet"):
+        return encode_address(self.hash160(), network)
 

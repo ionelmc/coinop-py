@@ -129,9 +129,7 @@ class MultiNode:
         return Script(public_keys=keys, needed=m)
 
     def address(self):
-        def p2sh_address(script):
-            return "foooooo"
-        return p2sh_address(self.script)
+        return self.script().p2sh_address()
 
 
     def p2sh_script(self):
