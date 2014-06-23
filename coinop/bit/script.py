@@ -36,9 +36,11 @@ def from_string(string):
     for word in string.split():
         if word.isdigit() or (word[0] == '-' and word[1:].isdigit()):
             r.append(CScript([long(word)]))
-        elif ishex(word[2:]):
-            # Raw hex data, inserted NOT pushed onto stack:
-            r.append(unhexlify(word[2:].encode('utf8')))
+        elif ishex(word):
+            word_bytes = unhexlify(word.encode('utf8'))
+            push_code = chr(len(word_bytes))
+            r.append(push_code + word_bytes)
+
         elif len(word) >= 2 and word[0] == "'" and word[-1] == "'":
             r.append(CScript([bytes(word[1:-1].encode('utf8'))]))
         elif word in opcodes_by_name:
@@ -115,6 +117,9 @@ class Script:
         self.cscript = cscript
 
     def to_string(self):
+        return cscript_to_string(self.cscript)
+
+    def __str__(self):
         return cscript_to_string(self.cscript)
 
     def to_hex(self):
