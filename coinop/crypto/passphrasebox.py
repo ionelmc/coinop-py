@@ -1,3 +1,6 @@
+# Annoying warning at startup:
+# https://github.com/pyca/pynacl/issues/62
+# Fixed June 18th 2014.
 from nacl.secret import SecretBox
 import nacl.utils
 

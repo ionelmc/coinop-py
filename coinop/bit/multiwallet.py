@@ -82,6 +82,7 @@ class MultiWallet:
             path = output['metadata']['wallet_path']
             node = self.path(path)
             # TODO: use python equiv of ruby to_s
+            # apparently the global str() ?
             node.p2sh_script.string() == output.script.string()
         except KeyError:
             return True
