@@ -1,0 +1,43 @@
+---
+  key: "tYUp-O7n3dQmJUK_Uh_zWg"
+  status: "unsigned"
+  version: 1
+  lock_time: 0
+  hash: "1c2172f715a4f5aa2bd11026f4a6c9d5555cdfbe95d3dea3f74a6465220d455b"
+  inputs: 
+    - 
+      output: 
+        transaction_hash: "a157bb2213ad9e0bfaf3366205db4d5d45fdb6dc39c6e815adb1006eacbd7783"
+        index: 1
+        value: 60000000
+        script: 
+          type: "script_hash"
+          string: "OP_HASH160 ba2fc407b830d432483556aa2111c01ca7de6598 OP_EQUAL"
+        address: "2NADgtnZiBRuovb5yajgyyUuppbmvEdyfYZ"
+        metadata: 
+          wallet_path: "m/1/0/0"
+      signatures: []
+      sig_hash: "C9YVGyEhBneLFcj7VFB8uvMfzuUftbzKE9N8rR5DDrBH"
+      script_sig: ""
+  outputs: 
+    - 
+      transaction_hash: "1c2172f715a4f5aa2bd11026f4a6c9d5555cdfbe95d3dea3f74a6465220d455b"
+      index: 0
+      value: 6000000
+      script: 
+        type: "pubkey_hash"
+        string: "OP_DUP OP_HASH160 b53915aa830a67fa59b23fda020ce540ef63e953 OP_EQUALVERIFY OP_CHECKSIG"
+      address: null
+      metadata: {}
+    - 
+      transaction_hash: "1c2172f715a4f5aa2bd11026f4a6c9d5555cdfbe95d3dea3f74a6465220d455b"
+      index: 1
+      value: 54000000
+      script: 
+        type: "script_hash"
+        string: "OP_HASH160 dc909ce8c4df926ad86b85a68334669a9c0a62c8 OP_EQUAL"
+      address: "2NDMTtNMPrYpMVoh7hnaQQd2M8CmD97yDso"
+      metadata: 
+        wallet_path: "m/1/1/1"
+  url: "http://localhost:8998/transactions/tYUp-O7n3dQmJUK_Uh_zWg"
+

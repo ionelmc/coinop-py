@@ -1,6 +1,19 @@
+import pytest
+import yaml
 
-from coinop.bit import transaction
+from binascii import hexlify, unhexlify
+from coinop.bit.transaction import Transaction
+from coinop.bit.script import from_string
 
-def test_from_data():
-    pass
+@pytest.fixture
+def data():
+    with open(u"coinop/tests/data/unsigned_payment.yaml", u"r") as file:
+        data = yaml.load(file)
+    return data
+
+
+
+def test_from_data(data):
+    Transaction(data=data)
+
 
