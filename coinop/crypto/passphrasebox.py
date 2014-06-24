@@ -24,6 +24,7 @@ class PassphraseBox:
         return ppbox._decrypt(encrypted['ciphertext'], encrypted['nonce'])
 
     def __init__(self, passphrase, salt=None, iterations=None):
+        passphrase = passphrase.encode('utf-8')
         if salt is None:
             salt = nacl.utils.random(16)
             iterations = self.ITERATIONS
@@ -38,6 +39,7 @@ class PassphraseBox:
 
 
     def _encrypt(self, plaintext):
+        plaintext = plaintext.encode('utf-8')
         nonce = nacl.utils.random(SecretBox.NONCE_SIZE)
         encrypted = self.box.encrypt(plaintext, nonce)
         ciphertext = encrypted.ciphertext
