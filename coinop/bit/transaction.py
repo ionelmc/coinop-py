@@ -19,7 +19,11 @@ class Input:
 
         self.signatures = []
 
-        self._sig_hash = data.get('sig_hash', None)
+        self.sig_hash_hex = data.get('sig_hash', None)
+        if self.sig_hash_hex:
+            self.sig_hash_bytes = unhexlify(self.sig_hash_hex)
+        else:
+            self.sig_hash_bytes = None
 
     def native(self):
         tx_hex = self.output.transaction_hash
@@ -37,9 +41,7 @@ class Output:
         if transaction:
             self.transaction = transaction
         elif 'transaction_hash' in data:
-            h = data['transaction_hash']
-            #h = "".join(reversed(h))
-            self._transaction_hash = h
+            self._transaction_hash = data['transaction_hash']
 
         self.index = data.get('index', None)
         self.value = data.get('value', -1)

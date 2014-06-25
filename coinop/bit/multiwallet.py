@@ -144,7 +144,9 @@ class MultiNode:
     def sign(self, name, value):
         try:
             key = self.private_keys[name]
-            key.sign(value) # probably need to add \x01 ??
+            # \x01 means the hash type is SIGHASH_ALL
+            # https://en.bitcoin.it/wiki/OP_CHECKSIG#Hashtype_SIGHASH_ALL_.28default.29
+            return key.sign(value) + b'\x01'
         except KeyError:
             raise Exception("No such key: '{0}'".format(name))
 
