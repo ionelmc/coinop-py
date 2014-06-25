@@ -25,9 +25,9 @@ def imported(imported_data):
     return MultiWallet(private=private)
 
 def test_properties(generated):
-    assert sorted(generated.trees.keys()), ["backup", "primary"]
-    assert sorted(generated.private_trees.keys()), ["backup", "primary"]
-    assert sorted(generated.public_trees.keys()), []
+    assert sorted(generated.trees.keys()) == ["backup", "primary"]
+    assert sorted(generated.private_trees.keys()) == ["backup", "primary"]
+    assert generated.public_trees.keys() == []
 
 def test_individual_seeds(generated):
     seed = generated.private_seed("backup")

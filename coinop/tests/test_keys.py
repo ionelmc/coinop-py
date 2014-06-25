@@ -39,7 +39,7 @@ def test_key_stuff():
     assert path['primary_hex'] ==  hexlify(node.secret_exponent_bytes)
 
 
-    priv = PrivateKey(node.secret_exponent_bytes)
+    priv = PrivateKey.from_secret(node.secret_exponent_bytes)
     pub = priv.public_key()
 
     py_sig = priv.sign(digest)

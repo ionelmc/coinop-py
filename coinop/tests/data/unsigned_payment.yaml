@@ -17,7 +17,7 @@
         metadata: 
           wallet_path: "m/1/0/0"
       signatures: []
-      sig_hash: "C9YVGyEhBneLFcj7VFB8uvMfzuUftbzKE9N8rR5DDrBH"
+      sig_hash: "87a49436f691f17b5a7d67384ea4b8a06fbbd3c1ca5b75d043006afdbb033fd9"
       script_sig: ""
   outputs: 
     - 
@@ -40,4 +40,4 @@
       metadata: 
         wallet_path: "m/1/1/1"
   url: "http://localhost:8998/transactions/tYUp-O7n3dQmJUK_Uh_zWg"
-
+  redeem_script: "2 027cd62fb9367697f0185e75863c50cd266681ee6b8539d585d6e775d6c8340d8d 0393d7406a93934a27870c82a7cf2a939516d3de8d6157280d41f4b9cdec940b12 022e53655737612a2cf22cfe31c86cb22543ea105a0c2dd824ab6a20decec6ef79 3 OP_CHECKMULTISIG"

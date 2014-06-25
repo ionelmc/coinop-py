@@ -33,9 +33,12 @@ class MultiWallet(object):
             tree = bip32.Wallet.from_wallet_key(seed)
             self.private_trees[name] = self.trees[name] = tree
 
-        for name, seed in private.iteritems():
+        for name, seed in public.iteritems():
             tree = bip32.Wallet.from_wallet_key(seed)
             self.public_trees[name] = self.trees[name] = tree
+
+    def to_dict(self):
+        return dict(private=self.private_seeds(), public=self.public_seeds())
 
     def private_seed(self, name):
         try:
@@ -45,10 +48,13 @@ class MultiWallet(object):
 
 
     def public_seed(self, name):
-        try:
-            return self.public_trees[name].wallet_key()
-        except KeyError:
+        tree = self.public_trees.get(name, None)
+        if not tree:
+            tree = self.private_trees.get(name, None)
+        if not tree:
             raise Exception("No public tree for '{0}'".format(name))
+        return tree.wallet_key()
+
 
     def private_seeds(self):
         out = {}
@@ -60,7 +66,7 @@ class MultiWallet(object):
     def public_seeds(self):
         out = {}
         for name, tree in self.public_trees.iteritems():
-            out[name] = self.private_seed(name)
+            out[name] = self.public_seed(name)
         return out
         
 

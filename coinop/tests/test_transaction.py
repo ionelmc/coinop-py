@@ -1,11 +1,14 @@
 import pytest
 import yaml
-
 from binascii import hexlify, unhexlify
+
 from coinop.bit.transaction import Transaction
-from coinop.bit.script import from_string
+from coinop.bit.script import Script, from_string
+
 from bitcoin.core.serialize import Hash
 from bitcoin.core import b2lx
+import bitcoin.base58 as base58
+
 
 @pytest.fixture
 def data():
@@ -16,9 +19,17 @@ def data():
 
 
 def test_from_data(data):
+    input = data['inputs'][0]
+    data_sig_hash = input['sig_hash']
+
     tx = Transaction(data=data)
 
-    print tx.to_hex()
-    print tx.hex_hash()
+    redeem_script = Script(string=data['redeem_script'])
+    sig_hash = tx.inputs[0].sig_hash(redeem_script)
+
+    assert hexlify(sig_hash) == data_sig_hash
+
+
+
 
 
