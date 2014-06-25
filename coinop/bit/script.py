@@ -1,9 +1,12 @@
 from binascii import hexlify, unhexlify
+
+#python-bitcoinlib
+
 from bitcoin.core.script import CScript, OPCODES_BY_NAME, OP_CHECKMULTISIG, CScriptTruncatedPushDataError, CScriptInvalidError
 
+import bitcoin
 from bitcoin.wallet import CBitcoinAddress
 from bitcoin.core import b2x, Hash160
-import bitcoin
 from bitcoin.base58 import encode, decode
 
 def encode_address(data, network):
@@ -126,13 +129,13 @@ class Script:
         return hexlify(self.cscript)
 
     def to_binary(self):
-        return
+        pass
 
     def hash160(self):
         return Hash160(self.cscript)
 
     def p2sh_script(self):
-        cscript = self.script.to_p2sh_scriptPubKey()
+        cscript = self.cscript.to_p2sh_scriptPubKey()
         return Script(cscript=cscript)
 
     def p2sh_address(self, network="testnet"):

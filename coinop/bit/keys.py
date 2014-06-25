@@ -7,7 +7,7 @@ from ecdsa.util import string_to_number, number_to_string, randrange
 from ecdsa.ellipticcurve import Point
 
 
-class PrivateKey:
+class PrivateKey(object):
 
     @classmethod
     def from_secret(cls, secret):
@@ -32,7 +32,7 @@ class PrivateKey:
         return self.key.to_string()
 
 
-class PublicKey:
+class PublicKey(object):
 
     @classmethod
     def from_string(cls, string):

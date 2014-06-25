@@ -3,6 +3,7 @@
 # Fixed June 18th 2014.
 from nacl.secret import SecretBox
 import nacl.utils
+from nacl.utils import random
 
 from Crypto.Protocol.KDF import PBKDF2
 
@@ -26,7 +27,7 @@ class PassphraseBox:
     def __init__(self, passphrase, salt=None, iterations=None):
         passphrase = passphrase.encode('utf-8')
         if salt is None:
-            salt = nacl.utils.random(16)
+            salt = random(16)
             iterations = self.ITERATIONS
         else:
             salt = salt.decode('hex')
@@ -40,7 +41,7 @@ class PassphraseBox:
 
     def _encrypt(self, plaintext):
         plaintext = plaintext.encode('utf-8')
-        nonce = nacl.utils.random(SecretBox.NONCE_SIZE)
+        nonce = random(SecretBox.NONCE_SIZE)
         encrypted = self.box.encrypt(plaintext, nonce)
         ciphertext = encrypted.ciphertext
         return dict(

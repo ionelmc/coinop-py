@@ -4,6 +4,8 @@ import yaml
 from binascii import hexlify, unhexlify
 from coinop.bit.transaction import Transaction
 from coinop.bit.script import from_string
+from bitcoin.core.serialize import Hash
+from bitcoin.core import b2lx
 
 @pytest.fixture
 def data():
@@ -14,6 +16,9 @@ def data():
 
 
 def test_from_data(data):
-    Transaction(data=data)
+    tx = Transaction(data=data)
+
+    print tx.to_hex()
+    print tx.hex_hash()
 
 

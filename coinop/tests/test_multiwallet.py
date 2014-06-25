@@ -58,6 +58,7 @@ def test_compatibility(imported, imported_data):
     for path, values in imported_data['paths'].iteritems():
         node = imported.path(path)
         multisig_script = node.script()
+        print repr(multisig_script.cscript)
         assert values["multisig_script"] == multisig_script.to_string()
 
     

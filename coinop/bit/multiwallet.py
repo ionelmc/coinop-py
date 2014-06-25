@@ -1,22 +1,20 @@
 from binascii import hexlify, unhexlify
-from nacl.utils import random
 
-from pycoin.key import Key, bip32
-from bitcoin.core.script import CScript, OP_CHECKMULTISIG
-from bitcoin.wallet import CBitcoinSecret
+from nacl.utils import random
+from pycoin.key import bip32
 
 from .script import Script
 from .keys import PrivateKey, PublicKey
 
-from pycoin.serialize import h2b
 
-class MultiWallet:
+class MultiWallet(object):
 
     @classmethod
     def generate(cls, names, network="testnet"):
         seeds = {}
         def create_node(name):
             secret = random(32)
+            # FIXME: set blockchain/network correctly
             tree = bip32.Wallet.from_master_secret(secret, netcode='XTN')
             return tree
 
@@ -94,7 +92,7 @@ class MultiWallet:
     def sign_input(input):
         path = input['output']['metadata']['wallet_path']
         node = self.path(path)
-        sig_hash = transaction.sig_hash(input, node.script)
+        sig_hash = input.sig_hash(node.script)
         return node.signatures(sig_hash)
 
 
@@ -109,11 +107,9 @@ class MultiNode:
         self.public_keys = {}
 
         for name, node in private.iteritems():
-            #key = Key.from_text(node.wallet_key(as_private=True))
             priv = PrivateKey.from_secret(node.secret_exponent_bytes)
             self.private_keys[name] = priv
 
-            #pubkey = Key.from_text(node.wallet_key())
             pub = priv.public_key()
             self.public_keys[name] = pub
 
@@ -125,7 +121,6 @@ class MultiNode:
     def script(self, m=2):
         names = sorted(self.public_keys.keys())
         keys = [self.public_keys[name].compressed() for name in names]
-        #print repr(keys)
 
         return Script(public_keys=keys, needed=m)
 
