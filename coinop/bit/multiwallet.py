@@ -93,12 +93,12 @@ class MultiWallet(object):
 
 
     def signatures(self, transaction):
-        return map(sign_input, transaction.inputs)
+        return map(self.sign_input, transaction.inputs)
 
-    def sign_input(input):
-        path = input['output']['metadata']['wallet_path']
+    def sign_input(self, input):
+        path = input.output.metadata['wallet_path']
         node = self.path(path)
-        sig_hash = input.sig_hash(node.script)
+        sig_hash = input.sig_hash(node.script())
         return node.signatures(sig_hash)
 
 
@@ -138,8 +138,8 @@ class MultiNode:
         return Script(address=self.address)
 
     def signatures(self, value):
-        names = self.public_keys.keys().sort()
-        return dict((name, self.sign(value)) for name in names)
+        names = sorted(self.private_keys.keys())
+        return dict((name, self.sign(name, value)) for name in names)
 
     def sign(self, name, value):
         try:

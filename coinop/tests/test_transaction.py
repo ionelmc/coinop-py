@@ -11,20 +11,20 @@ import bitcoin.base58 as base58
 
 
 @pytest.fixture
-def data():
+def transaction_data():
     with open(u"coinop/tests/data/unsigned_payment.yaml", u"r") as file:
         data = yaml.load(file)
     return data
 
 
 
-def test_from_data(data):
-    input = data['inputs'][0]
+def test_from_data(transaction_data):
+    input = transaction_data['inputs'][0]
     data_sig_hash = input['sig_hash']
 
-    tx = Transaction(data=data)
+    tx = Transaction(data=transaction_data)
 
-    redeem_script = Script(string=data['redeem_script'])
+    redeem_script = Script(string=transaction_data['redeem_script'])
     sig_hash = tx.inputs[0].sig_hash(redeem_script)
 
     assert hexlify(sig_hash) == data_sig_hash

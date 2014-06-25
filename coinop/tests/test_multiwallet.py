@@ -1,12 +1,13 @@
 import pytest
 import yaml
 
+from bitcoin.wallet import CBitcoinAddress, CBitcoinSecret
+from bitcoin.core import Hash160
+
 from binascii import hexlify, unhexlify
 from coinop.bit.multiwallet import MultiWallet
 from coinop.bit.script import Script
-
-from bitcoin.wallet import CBitcoinAddress, CBitcoinSecret
-from bitcoin.core import Hash160
+from coinop.bit.transaction import Transaction
 
 
 @pytest.fixture
@@ -14,15 +15,32 @@ def generated():
     return MultiWallet.generate(["primary", "backup"])
 
 @pytest.fixture
-def imported_data():
+def wallet_data():
     with open(u"coinop/tests/data/multi_wallet.yaml", u"r") as file:
         data = yaml.load(file)
     return data
 
 @pytest.fixture
-def imported(imported_data):
-    private = imported_data['private']
+def imported_wallet(wallet_data):
+    private = wallet_data['private']
     return MultiWallet(private=private)
+
+@pytest.fixture
+def transaction_data():
+    with open(u"coinop/tests/data/unsigned_payment.yaml", u"r") as file:
+        data = yaml.load(file)
+    return data
+
+@pytest.fixture
+def transaction(transaction_data):
+    return Transaction(data=transaction_data)
+
+@pytest.fixture
+def limited_wallet(imported_wallet):
+    private = dict(primary=imported_wallet.private_seed('primary'))
+    public = imported_wallet.public_seeds()
+    return MultiWallet(private=private, public=public)
+
 
 def test_properties(generated):
     assert sorted(generated.trees.keys()) == ["backup", "primary"]
@@ -44,9 +62,9 @@ def test_reconstructing_from_seeds(generated):
     reconstructed = MultiWallet(private=generated.private_seeds())
     assert generated.private_seeds() == reconstructed.private_seeds()
 
-def test_node_for_path(imported, imported_data):
-    for path, values in imported_data['paths'].iteritems():
-        node = imported.path(path)
+def test_node_for_path(imported_wallet, wallet_data):
+    for path, values in wallet_data['paths'].iteritems():
+        node = imported_wallet.path(path)
         address = node.address()
 
         assert values["address"] == address
@@ -54,13 +72,17 @@ def test_node_for_path(imported, imported_data):
         #assert values["multisig_script"] == multisig_script.to_string()
 
 
-def test_compatibility(imported, imported_data):
-    for path, values in imported_data['paths'].iteritems():
-        node = imported.path(path)
+def test_compatibility(imported_wallet, wallet_data):
+    for path, values in wallet_data['paths'].iteritems():
+        node = imported_wallet.path(path)
         multisig_script = node.script()
-        print repr(multisig_script.cscript)
         assert values["multisig_script"] == multisig_script.to_string()
 
+def test_signing(transaction, limited_wallet):
+    inputs = limited_wallet.signatures(transaction)
+    assert isinstance(inputs, list)
+    assert isinstance(inputs[0], dict)
+    assert inputs[0].keys() == ['primary']
     
 
 
