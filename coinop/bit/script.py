@@ -2,7 +2,7 @@ from binascii import hexlify, unhexlify
 
 #python-bitcoinlib
 
-from bitcoin.core.script import CScript, OPCODES_BY_NAME, OP_CHECKMULTISIG, CScriptTruncatedPushDataError, CScriptInvalidError
+from bitcoin.core.script import CScript, OPCODES_BY_NAME, OP_CHECKMULTISIG, OP_HASH160, OP_EQUAL, CScriptTruncatedPushDataError, CScriptInvalidError
 
 import bitcoin
 from bitcoin.wallet import CBitcoinAddress
@@ -53,16 +53,14 @@ def from_string(string):
 
     return CScript(b''.join(r))
 
-def from_address(address):
-    pass
+def from_p2sh_address(address):
+    return CScript([OP_HASH160, CBitcoinAddress(address), OP_EQUAL])
+
 
 def multisig(**options):
     m = options['needed']
     keys = options['public_keys']
     return CScript([m] + keys + [3, OP_CHECKMULTISIG])
-
-def from_signatures(signatures):
-    pass
 
 
 # adapted from python-bitcoinlib
@@ -107,12 +105,12 @@ class Script:
             binary = unhexlify(options['hex'])
             self.set_cscript(CScript(binary))
         else:
-            if 'address' in options:
-                pass
+            if 'p2sh_address' in options:
+                self.set_cscript(from_p2sh_address(options['p2sh_address']))
             elif ('public_keys' in options) and ('needed' in options):
                 self.set_cscript(multisig(**options))
-            elif 'signatures' in options:
-                pass
+            #elif 'signatures' in options:
+                #pass
             else:
                 raise Exception("Invalid options")
 

@@ -8,9 +8,9 @@ from coinop.bit.script import Script
 
 class Input:
 
-    def __init__(self, data, transaction=None):
+    def __init__(self, data, transaction=None, index=None):
         self.transaction = transaction
-        self.index = data.get('index', None)
+        self.index = index
         output = data['output']
         if isinstance(output, Output):
             self.output = output
@@ -81,8 +81,8 @@ class Transaction:
         self.hash = data.get('hash', None)
 
         for input_data in data.get('inputs', []):
-            input_data['index'] = len(self.inputs)
-            _input = Input(transaction=self, data=input_data)
+            index = len(self.inputs)
+            _input = Input(transaction=self, data=input_data, index=index)
             self.inputs.append(_input)
 
         for output_data in data.get('outputs', []):

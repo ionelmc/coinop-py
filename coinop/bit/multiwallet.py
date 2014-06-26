@@ -6,6 +6,7 @@ from pycoin.key import bip32
 from .script import Script
 from .keys import PrivateKey, PublicKey
 
+import bitcoin.base58 as base58
 
 class MultiWallet(object):
 
@@ -82,15 +83,13 @@ class MultiWallet(object):
         return MultiNode(path, **options)
 
     def is_valid_output(self, output):
-        try:
-            path = output['metadata']['wallet_path']
-            node = self.path(path)
-            # TODO: use python equiv of ruby to_s
-            # apparently the global str() ?
-            node.p2sh_script.string() == output.script.string()
-        except KeyError:
-            return True
-
+        path = output.metadata['wallet_path']
+        node = self.path(path)
+        # TODO: use python equiv of ruby to_s
+        # apparently the global str() ?
+        ours = node.p2sh_script().to_string()
+        theirs = output.script.to_string()
+        return ours == theirs
 
     def signatures(self, transaction):
         return map(self.sign_input, transaction.inputs)
@@ -135,11 +134,13 @@ class MultiNode:
 
 
     def p2sh_script(self):
-        return Script(address=self.address)
+        return Script(p2sh_address=self.address())
 
     def signatures(self, value):
         names = sorted(self.private_keys.keys())
-        return dict((name, self.sign(name, value)) for name in names)
+        #return dict((name, self.sign(name, value)) for name in names)
+        s = ((name, base58.encode(self.sign(name, value))) for name in names)
+        return dict(s)
 
     def sign(self, name, value):
         try:
