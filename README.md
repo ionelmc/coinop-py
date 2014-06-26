@@ -5,7 +5,7 @@ coinop-py is still beta code but is in active development. Bug reports and
 patches welcome.
 
 
-Installing Coinop:
+Installing coinop-py:
 
 1. Install a python 2.7 environment (the nicest way to do this is with pyenv
    and virtualenv).  It is developed under 2.7.7, and while it may work with
@@ -29,5 +29,3 @@ Installing Coinop:
    Or: install from the github repo (https://github.com/BitVault/coinop-py) and
    run 'python setup.py install' ('python setup.py develop' if you plan to work
    on the codebase yourself).
-
-   https://github.com/BitVault/coinop-py.git
