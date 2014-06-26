@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='coinop',
       version='0.0.1',
@@ -7,7 +7,7 @@ setup(name='coinop',
       author='Matthew King',
       author_email='matthew@bitvault.io',
       license='MIT',
-      packages=['coinop'],
+      packages=find_packages(),
       install_requires=[
           'cffi',
           'pytest',
