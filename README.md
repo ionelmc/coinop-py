@@ -1,8 +1,8 @@
-Coinop: python crypto currency conveniences
+coinop-py: python crypto currency conveniences
 
 
-coinop is still beta code but is in active development; bug reports and patches
-welcomed.
+coinop-py is still beta code but is in active development. Bug reports and
+patches welcome.
 
 
 Installing Coinop:
