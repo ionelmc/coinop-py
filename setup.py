@@ -9,6 +9,7 @@ setup(name='coinop',
       license='MIT',
       packages=['coinop'],
       install_requires=[
+          'cffi',
           'pytest',
           'pycrypto',
           'pynacl',
@@ -18,4 +19,3 @@ setup(name='coinop',
           'ecdsa'
       ],
       zip_safe=False)
-
