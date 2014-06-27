@@ -12,7 +12,7 @@ import bitcoin.base58 as base58
 
 @pytest.fixture
 def transaction_data():
-    with open(u"coinop/tests/data/unsigned_payment.yaml", u"r") as file:
+    with open(u"tests/data/unsigned_payment.yaml", u"r") as file:
         data = yaml.load(file)
     return data
 

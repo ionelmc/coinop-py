@@ -21,7 +21,7 @@ from coinop.bit.keys import PrivateKey, PublicKey
 
 
 def test_key_stuff():
-    with open(u"coinop/tests/data/multi_wallet.yaml", u"r") as file:
+    with open(u"tests/data/multi_wallet.yaml", u"r") as file:
         data = yaml.load(file)
 
     seed = data['private']['primary']
