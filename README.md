@@ -1,7 +1,7 @@
 coinop-py: python crypto currency conveniences
 
 
-coinop-py is still beta code but is in active development. Bug reports and
+coinop-py is still alpha code but is in active development. Bug reports and
 patches welcome.
 
 

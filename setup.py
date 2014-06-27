@@ -7,7 +7,8 @@ setup(name='coinop',
       author='Matthew King',
       author_email='matthew@bitvault.io',
       license='MIT',
-      packages=find_packages(),
+      packages=find_packages(exclude=[
+          u'*.tests', u'*.tests.*', u'tests.*', u'tests']),
       install_requires=[
           'cffi',
           'pytest',
