@@ -7,8 +7,6 @@ patches welcome.
 
 Installing coinop-py:
 
-0. Install libsodium
-
 1. Install a python 2.7 environment (the nicest way to do this is with pyenv
    and virtualenv).  It is developed under 2.7.7, and while it may work with
    earlier versions that is currently untested. The goal is compatibility with
