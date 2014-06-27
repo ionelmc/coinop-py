@@ -1,0 +1,5 @@
+coinop
+=============================
+
+.. automodule:: coinop
+    :members:
